@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>放大镜</title>
+    <style type="text/css">
+        .box{ height: 150px; width: 280px; position: relative; float: left}
+            .box img{ height: 150px; width: 280px;}
+            #left{ height: 100px; width: 100px; background: url("images/2.png"); position: absolute; left: 0; top:0; display: none}
+        #right{ height: 200px; width: 200px; border: 1px solid #000; float: left; margin-left: 10px; display: none; background: url("images/1a.jpg")}/*要将背景图缩小相应倍数来符合正好的放大效果原图/img=_right/_left*/
+    </style>
+</head>
+<body>
+<div class="box">
+    <img src="images/1a.jpg" alt="">
+    <div id="left"></div>
+</div>
+<div id="right"></div>
+<script>
+    var box=document.getElementsByClassName("box")[0];
+    var _left=document.getElementById("left");
+    var _right=document.getElementById("right");
+
+    box.onmousedown=function(e){
+        var ev=window.event||e;
+        _left.style.display="block";
+        _right.style.display="block";
+        window.event?ev.returnValue=false:ev.preventDefault();
+        window.event?ev.cancelBubble=true:ev.stopPropagation();
+        document.onmousemove=function(e){
+            var ev=window.event||e;
+            var num=_right.offsetWidth/_left.offsetWidth;//这个值是点击时出现的
+            //使鼠标在物块中间
+            var mouseL=ev.clientX-_left.offsetWidth/2;
+            var mouseT=ev.clientY-_left.offsetHeight/2;
+            var l=ev.clientX-_left.offsetWidth/2-box.offsetLeft;
+            var t=ev.clientY-box.offsetLeft-_left.offsetWidth/2;//鼠标对应的坐标减去box的左边的值再减去物块的半个宽度 可以得到物块距离box的left值
+            //获取图片可视区域
+            var maxleft=box.offsetWidth-_left.offsetWidth;
+            var maxtop=box.offsetHeight-_left.offsetHeight;//box的宽度减去物块的宽度为最大的边界
+            if(l>maxleft){
+                l=maxleft;
+            }else if(l<0){
+                l=0;
+            }
+            if(t>maxtop){
+                t=maxtop;
+            }else if(t<0){
+                t=0;
+            }
+            _left.style.left=l+"px";
+            _left.style.top=t+"px";
+
+            _right.style.backgroundPositionX=-l*num+"px"
+            _right.style.backgroundPositionY=-t*num+"px"//利用背景图 改变position位置
+
+        }
+    }
+    document.onmouseup=function(){
+        document.onmousemove=null;
+        _left.style.display="none";
+        _right.style.display="none"
+    }
+</script>
+</body>
+</html>

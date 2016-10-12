@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微博发布</title>
+    <style>
+        html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0; }
+        body{ position: relative}
+        h1{ text-align: center;}
+        #box{width: 400px; border: 1px solid #000; margin: 0 auto;min-height: 600px;}
+        button{ float: right;border: 1px solid #000; background: none; margin: 5px;}
+        #publish{ height: 300px; width: 300px; border: 1px solid #000; position: absolute; background: #DF5420; display: none; display: none;z-index: 1001; left: 0; top:0}
+        #blank{ width: 100%; position: absolute; z-index: 1000; opacity: 0.6; background: grey; display: none}
+    </style>
+</head>
+<body>
+<div id="blank"></div>
+<h1>微博发布</h1>
+<div id="box">
+    <div id="top">
+        <button id="btn1">点击发布微博</button>
+    </div>
+    <div id="bottom">
+        <!--微博添加处-->
+
+    </div>
+</div>
+<div id="publish">
+    <textarea name="" id="" cols="30" rows="10"></textarea>
+    <button id="btn2">submit</button>
+</div>
+<script>
+    var blank=document.getElementById("blank");
+    var publish=document.getElementById("publish");
+    var btn1=document.getElementById("btn1");
+    blank.style.height=document.documentElement.clientHeight+"px";
+    //显示发布框以及遮罩
+    btn1.onclick=function(){
+        blank.style.display="block";
+        publish.style.display="block";
+    }
+    //发布框的拖拽
+    publish.onmousedown=function(e){
+        var ev=window.event||e;
+        var x=e.offsetX;
+        var y=e.offsetY;
+        window.event?ev.returnValue=false:ev.preventDefault();
+        document.onmousemove=function(e){
+            var ev=window.event||e;
+            var _left=ev.clientX-x;
+            var _top=ev.clientY-y;
+            //获取可视区域
+            var sw=document.documentElement.clientWidth;
+            var sh=document.documentElement.clientHeight;
+            //获取物块大小
+            var pub_width=publish.offsetWidth;
+            var pub_height=publish.offsetHeight;
+            if(_left<0){
+                _left=0
+            }else if(_left>sw-pub_width){
+                _left=sw-pub_width;
+            }
+            if(_top<0){
+                _top=0
+            }else if(_top>sh-pub_height){
+                _top=sh-pub_height
+            }
+            publish.style.left=_left+"px";
+            publish.style.top=_top+"px";
+        }
+    }
+    document.onmouseup=function(){
+        document.onmousemove=null;
+    }
+</script>
+</body>
+</html>

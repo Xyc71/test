@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>兼容</title>
+</head>
+<body>
+<script>
+    //事件对象的兼容
+    window.event||e
+    //阻止冒泡
+    window.event?ev.cancelBubble=true:ev.stopPropagation();
+    //阻止浏览器默认行为
+    window.event?ev.returnValue=false:ev.preventDefault();
+    //对getElementsByClassName进行兼容
+    function getClassname(classname){
+        var arr=[];
+        if(document.getElementsByClassName==undefined){
+            var arr1=document.getElementsByTagName("*");
+            for(var i=0;i<arr1.length;i++){
+                if(arr1[i]==classname){
+                    arr.push(arr1[i])
+                }
+            }return arr;
+        }else{
+            return document.getElementsByClassName(classname);
+        }
+    }
+    //获得可视区域
+    function getClient(){
+        if(window.innerHeight){
+            return window.innerHeight;
+        }else if(document.compatMode==CSS1Compat){
+            return document.documentElement.clientHeight
+        }else{
+            return document.body.clientHeight;
+        }
+    }
+    //兼容滚动条高度
+    document.documentElement.scrollTop+document.body.scrollTop
+    //兼容非行间样式获取
+    function getStyle(obj,style){
+        if(obj.style){
+            return obj.currentStyle[style]
+        }else{
+            return window.getComputedStyle(obj,false)[style]
+        }
+    }
+    //兼容子节点中的第一个
+    obj.firstElementChild||obj.firstChild
+    //兼容兄弟节点的上一个
+    obj.previousElementSibling||obj.previousSibling
+
+</script>
+</body>
+</html>
